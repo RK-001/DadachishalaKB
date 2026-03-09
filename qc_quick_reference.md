@@ -534,3 +534,4 @@ Follow the same `useX()` / `useAddX()` / `useUpdateX()` / `useDeleteX()` pattern
 | `src/utils/adminSetup.js` | `createAdminUser()` | One-time admin account creation |
 | `src/config/colors.js` | Color palette constants | Shared color definitions |
 | `src/config/queryClient.jsx` | `QueryProvider` | React Query client with default config |
+
