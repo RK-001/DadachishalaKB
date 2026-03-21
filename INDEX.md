@@ -1,126 +1,109 @@
-# KB-INDEX.md — Workflow Navigation Index
+# KB Index Workflow Navigation
 
-> **Purpose:** This is the navigation index used by the KB updater workflow and AI agents that use the `fetch_kb_file` pattern. Each entry contains a File path, Keywords for routing, and a Covers summary.  
-> **Organization:** Educare (Dada Chi Shala) Educational Trust  
-> **Repository:** Dada Chi Shala NGO Website (React + Firebase SPA)  
-> **Maintained by:** KB updater workflow (`.github/workflows/update-kb.yml`)  
-> **Last Updated:** 2026-03-21
+Purpose: Navigation index for the knowledge base and for any agent using keyword lookup.
+Organization: Educare Dada Chi Shala Educational Trust
+Repository: Dada Chi Shala NGO Website React and Firebase SPA
+Last updated: 2026-03-21
 
----
+How to use this index
 
-## HOW TO USE THIS INDEX
+1. Find the module or keyword that matches the topic.
+2. Open the listed file.
+3. Validate collection names, field names, hooks, and service methods in qc_quick_reference.md.
+4. If the topic is not covered, call out the gap instead of guessing.
 
-1. Find the **module or keyword** that matches your topic.
-2. Use the **File** path to fetch the authoritative KB document.
-3. **Do NOT hallucinate** collection names, field names, component APIs, or hook signatures — look them up in the fetched doc.
-4. If a topic is not covered in any KB file, flag the gap to the user.
+Module entries
 
----
+Public information and storytelling
 
-## MODULE ENTRIES
+- File: 01-public-storytelling-module.md
+- Keywords: homepage, about, gallery, team, media, contact, blog, stories, testimonials, awards, news, videos, seo, hero, AnimatedCounter, successStories, GalleryPage, TeamPage, MediaPage, AboutPage, ContactPage
+- Covers: Public facing pages, storytelling content, content display components, related collections, and SEO behavior.
 
-Each entry follows the required format for AI agent navigation:
+Events management
 
-### Public Information & Storytelling
-- **File:** `doc/01-public-storytelling-module.md`
-- **Keywords:** homepage, about, gallery, team, media, contact, blog, stories, testimonials, awards, news, videos, SEO, hero, AnimatedCounter, impact numbers, GalleryCard, GalleryGrid, BlogCard, Footer, Navbar, success stories, successStories, GalleryPage, TeamPage, MediaPage, AboutPage, ContactPage
-- **Covers:** All public-facing information pages: requirements, component structure, Firestore collections (gallery, team, blogs, successStories, testimonials, awards, news, videos), and SEO strategy
+- File: 02-events-module.md
+- Keywords: events, EventsPage, EventCard, EventForm, EventDetails, EventManagement, upcoming events, useUpcomingEvents, events collection, event_date, admin event CRUD
+- Covers: Public events listing, upcoming event logic, and admin CRUD for events.
 
-### Events Management
-- **File:** `doc/02-events-module.md`
-- **Keywords:** events, EventsPage, EventCard, EventForm, EventDetails, EventManagement, upcoming events, useUpcomingEvents, events collection, event date filter, admin events CRUD
-- **Covers:** Public events listing, event detail view, and admin CRUD for the `events` Firestore collection
+Community engagement volunteers and branches
 
-### Community Engagement — Volunteers & Branches
-- **File:** `doc/03-community-engagement-module.md`
-- **Keywords:** volunteer, VolunteerPage, VolunteerManagement, volunteers collection, branch, branches, BranchesPage, BranchCard, BranchManagement, community, 4-step form
-- **Covers:** Volunteer registration 4-step form flow, admin volunteer review, branches public listing, and admin branch CRUD
+- File: 03-community-engagement-module.md
+- Keywords: volunteer, VolunteerPage, VolunteerManagement, volunteers collection, branch, branches, BranchesPage, BranchCard, BranchManagement, four step form
+- Covers: Volunteer registration flow, admin volunteer review, branch listing, and branch CRUD.
 
-### Donations & Fundraising
-- **File:** `doc/04-donations-fundraising-module.md`
-- **Keywords:** donate, donations, DonatePage, DonationManagement, Razorpay, razorpayService, createRazorpayOrder, verifyRazorpayPayment, razorpayWebhook, Cloud Functions, donors, donor records, receipt, payment, bank transfer, online donation
-- **Covers:** Full donation flow — Razorpay order creation, payment verification, webhook handling, Cloud Functions, donor record writing, email receipt, and admin donation management
+Donations and fundraising
 
-### Admin Content Management
-- **File:** `doc/05-admin-content-management-module.md`
-- **Keywords:** admin dashboard, AdminDashboard, admin CRUD, GalleryManagement, GalleryForm, TeamManagement, BlogManagement, BlogModal, StoriesTestimonialsManagement, DonationManagement, VolunteerManagement, BranchManagement, EventManagement, ImageUpload, AdminSetup, admin panel, content management
-- **Covers:** Admin dashboard layout, all admin tab components, image upload, and CRUD screens for every content type
+- File: 04-donations-fundraising-module.md
+- Keywords: donate, donations, DonatePage, DonationManagement, Razorpay, razorpayService, createRazorpayOrder, verifyRazorpayPayment, razorpayWebhook, donors, payment, bank transfer, online donation
+- Covers: Donation flow, Razorpay order and verification flow, webhook handling, donor records, receipts, and admin donation management.
 
-### Platform Infrastructure & Auth
-- **File:** `doc/06-platform-infrastructure-auth-module.md`
-- **Keywords:** App.jsx, router, routes, Firebase, Firestore, Auth, AuthContext, Firebase Storage, Realtime Database, maintenance mode, MaintenancePage, AdminLogin, ProtectedRoute, ErrorBoundary, ScrollToTop, Navbar, NotificationContext, code splitting, lazy loading, firebase.json, vercel.json, vite.config.js, tailwind.config.js, deployment, Firebase Hosting, Vercel, NotFoundPage, 404
-- **Covers:** App shell, routing, Firebase initialization, authentication, protected routes, maintenance mode killswitch, deployment configuration, and build tooling
+Admin content management
 
-### Data Model, Hooks & Services (Quick Reference)
-- **File:** `doc/quick-reference.md`
-- **Keywords:** Firestore collections, data model, fields, schema, useFirebaseQueries, useCRUD, useFirestore, queryClient, QUERY_KEYS, React Query, cachedDatabaseService, cacheService, emailService, imageUploadService, firebase.js, sanitization, validators, formatters, helpers, logger, environment variables, VITE_FIREBASE, env vars, build commands, npm run dev, npm run build, error patterns, cache strategy, governor limits, EmailJS, common modal
-- **Covers:** Complete Firestore data model (all collections + fields), all React Query hooks, all service methods, utility functions, environment variables, error patterns, and build/deployment commands
+- File: 05-admin-content-management-module.md
+- Keywords: admin dashboard, AdminDashboard, admin CRUD, GalleryManagement, TeamManagement, BlogManagement, StoriesTestimonialsManagement, DonationManagement, VolunteerManagement, BranchManagement, EventManagement, ImageUpload, admin panel
+- Covers: Admin dashboard layout, tabs, image upload, and CRUD screens for managed content.
 
-### Project Architecture (Overview Reference)
-- **File:** `ARCHITECTURE.md`
-- **Keywords:** architecture, project overview, tech stack, folder structure, directory structure, system diagram, data flow, read path, write path, routing architecture, caching strategy, code splitting, build chunks, deployment targets, coding standards, naming conventions, component conventions, data access rules, security rules, authentication flow, architectural decisions, Vite chunks, manualChunks, cloud functions overview, Firestore collections summary, environment variables, RTDB, dual-layer cache
-- **Covers:** High-level project architecture — tech stack table, annotated folder structure, system ASCII diagram, full routing map, Firestore read/write/donation data flow diagrams, Firestore collections summary, Cloud Functions inventory, caching strategy (L1/L2 + React Query), build & deployment config, coding standards, security conventions, authentication flow, and key architectural decisions
+Platform infrastructure and auth
 
----
+- File: 06-platform-infrastructure-auth-module.md
+- Keywords: App.jsx, router, routes, Firebase, Firestore, Auth, AuthContext, Firebase Storage, Realtime Database, maintenance mode, MaintenancePage, AdminLogin, ProtectedRoute, ErrorBoundary, ScrollToTop, NotificationContext, code splitting, lazy loading, firebase.json, vercel.json, vite.config.js, tailwind.config.js, deployment, NotFoundPage
+- Covers: App shell, routing, Firebase initialization, authentication, protected routes, maintenance mode, deployment configuration, and build tooling.
 
-## FIRESTORE COLLECTION → MODULE MAP
+Quick reference
 
-| Collection | Owner Module | Primary KB Doc |
-|------------|-------------|----------------|
-| `events` | Events | `doc/02-events-module.md` |
-| `volunteers` | Community | `doc/03-community-engagement-module.md` |
-| `branches` | Community | `doc/03-community-engagement-module.md` |
-| `donations` | Donations | `doc/04-donations-fundraising-module.md` |
-| `donors` | Donations | `doc/04-donations-fundraising-module.md` |
-| `gallery` | Public / Admin | `doc/01-public-storytelling-module.md` |
-| `successStories` | Public / Admin | `doc/01-public-storytelling-module.md` |
-| `testimonials` | Public / Admin | `doc/01-public-storytelling-module.md` |
-| `blogs` | Public / Admin | `doc/01-public-storytelling-module.md` |
-| `team` | Public / Admin | `doc/01-public-storytelling-module.md` |
-| `awards` | Public / Admin | `doc/01-public-storytelling-module.md` |
-| `news` | Public | `doc/01-public-storytelling-module.md` |
-| `videos` | Public | `doc/01-public-storytelling-module.md` |
-| `config/maintenanceMode` | Infrastructure | `doc/06-platform-infrastructure-auth-module.md` |
+- File: qc_quick_reference.md
+- Keywords: Firestore collections, data model, fields, schema, useFirebaseQueries, useCRUD, useFirestore, queryClient, QUERY_KEYS, React Query, cachedDatabaseService, cacheService, emailService, imageUploadService, firebase.js, sanitization, validators, helpers, logger, environment variables, VITE_FIREBASE, build commands, error patterns, cache strategy
+- Covers: Collection fields, hooks, service methods, utility notes, environment variables, common issues, and build commands.
 
----
+Project architecture
 
-## CROSS-REFERENCE MATRIX
+- File: ARCHITECTURE.md
+- Keywords: architecture, project overview, tech stack, folder structure, system diagram, data flow, read path, write path, routing architecture, caching strategy, deployment targets, coding standards, security rules, authentication flow, architectural decisions
+- Covers: High level system structure, diagrams, routing, data flow, collection summary, cloud functions, caching strategy, build and deployment, and coding standards.
 
-| User Intent | Primary File | Secondary File |
-|-------------|-------------|----------------|
-| "Add/change donation feature" | `doc/04-donations-fundraising-module.md` | `doc/quick-reference.md` → `donations`, `donors` |
-| "Add/change events feature" | `doc/02-events-module.md` | `doc/quick-reference.md` → `events` |
-| "Add/change volunteer flow" | `doc/03-community-engagement-module.md` | `doc/quick-reference.md` → `volunteers` |
-| "Modify admin dashboard" | `doc/05-admin-content-management-module.md` | `doc/06-platform-infrastructure-auth-module.md` |
-| "Change gallery or media" | `doc/01-public-storytelling-module.md` | `doc/05-admin-content-management-module.md` |
-| "Authentication or protected routes" | `doc/06-platform-infrastructure-auth-module.md` | — |
-| "Performance or caching" | `doc/quick-reference.md` → §5 | `doc/06-platform-infrastructure-auth-module.md` |
-| "SEO change" | `doc/01-public-storytelling-module.md` | `doc/quick-reference.md` |
-| "Deployment / hosting / env vars" | `doc/quick-reference.md` → §4 | `doc/06-platform-infrastructure-auth-module.md` |
-| "Blog feature" | `doc/05-admin-content-management-module.md` | `doc/01-public-storytelling-module.md` |
-| "Understand project architecture / overview" | `ARCHITECTURE.md` | `doc/quick-reference.md` |
-| "Tech stack / dependencies" | `ARCHITECTURE.md` → §2 | `package.json` |
-| "Folder structure / file locations" | `ARCHITECTURE.md` → §4 | — |
-| "Data flow / read-write path" | `ARCHITECTURE.md` → §6 | `doc/quick-reference.md` → §2 |
-| "Coding standards / conventions" | `ARCHITECTURE.md` → §11 | `.github/copilot-instructions.md` |
-| "Caching architecture" | `ARCHITECTURE.md` → §9 | `doc/quick-reference.md` → §5 |
+Collection to module map
 
----
+- events -> 02-events-module.md
+- volunteers -> 03-community-engagement-module.md
+- branches -> 03-community-engagement-module.md
+- donations -> 04-donations-fundraising-module.md
+- donors -> 04-donations-fundraising-module.md
+- gallery -> 01-public-storytelling-module.md
+- successStories -> 01-public-storytelling-module.md
+- testimonials -> 01-public-storytelling-module.md
+- blogs -> 01-public-storytelling-module.md
+- team -> 01-public-storytelling-module.md
+- awards -> 01-public-storytelling-module.md
+- news -> 01-public-storytelling-module.md
+- videos -> 01-public-storytelling-module.md
+- config/maintenanceMode -> 06-platform-infrastructure-auth-module.md
 
-## ROUTE MAP
+Cross reference by task
 
-| Route | Page Component | Auth Required | KB Doc |
-|-------|---------------|--------------|--------|
-| `/` | `HomePage.jsx` | No | `doc/01-public-storytelling-module.md` |
-| `/about` | `AboutPage.jsx` | No | `doc/01-public-storytelling-module.md` |
-| `/gallery` | `GalleryPage.jsx` | No | `doc/01-public-storytelling-module.md` |
-| `/team` | `TeamPage.jsx` | No | `doc/01-public-storytelling-module.md` |
-| `/media` | `MediaPage.jsx` | No | `doc/01-public-storytelling-module.md` |
-| `/events` | `EventsPage.jsx` | No | `doc/02-events-module.md` |
-| `/branches` | `BranchesPage.jsx` | No | `doc/03-community-engagement-module.md` |
-| `/volunteer` | `VolunteerPage.jsx` | No | `doc/03-community-engagement-module.md` |
-| `/donate` | `DonatePage.jsx` | No | `doc/04-donations-fundraising-module.md` |
-| `/contact` | `ContactPage.jsx` | No | `doc/01-public-storytelling-module.md` |
-| `/admin` | `AdminLogin.jsx` | No | `doc/06-platform-infrastructure-auth-module.md` |
-| `/admin/dashboard` | `AdminDashboard.jsx` | **Yes** | `doc/05-admin-content-management-module.md` |
-| `*` | `NotFoundPage.jsx` | No | `doc/06-platform-infrastructure-auth-module.md` |
+- Donation feature work: 04-donations-fundraising-module.md, then qc_quick_reference.md.
+- Event feature work: 02-events-module.md, then qc_quick_reference.md.
+- Volunteer flow work: 03-community-engagement-module.md, then qc_quick_reference.md.
+- Admin dashboard changes: 05-admin-content-management-module.md, then 06-platform-infrastructure-auth-module.md.
+- Gallery or media changes: 01-public-storytelling-module.md, then 05-admin-content-management-module.md.
+- Authentication or protected route changes: 06-platform-infrastructure-auth-module.md.
+- Performance or caching work: qc_quick_reference.md, then ARCHITECTURE.md.
+- SEO changes: 01-public-storytelling-module.md, then qc_quick_reference.md.
+- Deployment or environment setup: qc_quick_reference.md, then 06-platform-infrastructure-auth-module.md.
+- Architecture overview: ARCHITECTURE.md, then qc_quick_reference.md.
+
+Route map
+
+- / -> HomePage.jsx -> 01-public-storytelling-module.md
+- /about -> AboutPage.jsx -> 01-public-storytelling-module.md
+- /gallery -> GalleryPage.jsx -> 01-public-storytelling-module.md
+- /team -> TeamPage.jsx -> 01-public-storytelling-module.md
+- /media -> MediaPage.jsx -> 01-public-storytelling-module.md
+- /events -> EventsPage.jsx -> 02-events-module.md
+- /branches -> BranchesPage.jsx -> 03-community-engagement-module.md
+- /volunteer -> VolunteerPage.jsx -> 03-community-engagement-module.md
+- /donate -> DonatePage.jsx -> 04-donations-fundraising-module.md
+- /contact -> ContactPage.jsx -> 01-public-storytelling-module.md
+- /admin and /admin/login -> AdminLogin.jsx -> 06-platform-infrastructure-auth-module.md
+- /admin/dashboard -> AdminDashboard.jsx -> 05-admin-content-management-module.md
+- all other routes -> NotFoundPage.jsx -> 06-platform-infrastructure-auth-module.md
