@@ -1,4 +1,4 @@
-# Module 5 Admin Content Management
+# Module 6 Platform Infrastructure Authentication and Shared Services
 
 Version: 1.0
 Date: 2026-03-09
@@ -10,205 +10,223 @@ Organization: Educare Dada Chi Shala Educational Trust
 
 Business purpose
 
-This module gives internal staff a single operational workspace to manage the organization's digital content and records. It centralizes maintenance of team members, stories, blogs, gallery items, volunteers, branches, donations, and events.
+This module is the platform foundation of the application. It handles startup behavior, routing, authentication, maintenance mode, shared providers, query behavior, Firebase initialization, and deployment configuration.
 
 What this module does
 
-- Renders the admin dashboard shell and tabbed management experience.
-- Provides CRUD interfaces for multiple content collections.
-- Displays lightweight operational metrics.
-- Uses protected routing and shared modal and form components.
-- Invalidates query caches after successful mutations so public pages reflect current content.
+- Boots the React application and mounts global providers.
+- Initializes Firebase services and validates environment configuration.
+- Defines the public and admin route map.
+- Protects admin routes through authenticated navigation.
+- Applies query defaults, caching behavior, SEO support, notification behavior, and error handling.
+- Supports a Realtime Database maintenance mode toggle for production shutdown control.
 
 When it runs
 
-- On successful navigation to /admin/dashboard.
-- Whenever an authenticated admin changes dashboard tabs.
-- Whenever an admin opens a create or edit modal or submits a form.
+- Immediately on application startup.
+- On every route navigation.
+- On every authentication state change.
+- On browser refresh when cache cleanup and provider initialization run.
 
 ## 2. Business and Process Detail
 
 Business overview
 
-The admin dashboard is the operational control center of the application. It is the common authenticated surface through which feature specific modules are maintained.
+This module is not directly user facing in business terms, but it is the operational backbone that keeps all user facing modules available, secure, and maintainable.
 
 Process flow
 
 ```mermaid
 flowchart TD
-    A[Admin logs in] --> B[ProtectedRoute allows dashboard access]
-    B --> C[AdminDashboard renders tabs and stats]
-    C --> D[Admin selects management area]
-    D --> E[Component loads records through query hooks]
-    E --> F[Admin creates updates or deletes content]
-    F --> G[cachedDatabaseService writes Firestore]
-    G --> H[Query invalidation refreshes dashboard and public views]
+    A[main.jsx starts app] --> B[cacheService clears local cache]
+    B --> C[Helmet and Query providers mount]
+    C --> D[App.jsx initializes router and contexts]
+    D --> E[Realtime DB maintenance mode checked]
+    E --> F{Maintenance active in production}
+    F -->|Yes| G[Render MaintenancePage]
+    F -->|No| H[Render routed application]
+    H --> I{Route protected}
+    I -->|Yes| J[ProtectedRoute checks AuthContext]
+    I -->|No| K[Render public page]
 ```
 
 Detailed journey
 
-1. An authenticated admin enters the dashboard.
-2. AdminDashboard.jsx loads sidebar tabs and summary counts.
-3. The admin selects a tab such as Team, Stories, Blogs, Volunteers, Branches, Donations, Events, or Gallery.
-4. The active management component loads records through React Query.
-5. The admin opens create or edit dialogs, uploads media where needed, and submits changes.
-6. Mutation hooks call cachedDatabaseService.js and update the related Firestore collection.
-7. Query keys are invalidated so fresh data appears in both dashboard and public modules.
+1. main.jsx clears namespaced cache state to prevent stale data after full reload.
+2. The app mounts HelmetProvider and QueryProvider.
+3. App.jsx wraps the UI with AuthProvider and NotificationProvider.
+4. App.jsx reads config/maintenanceMode from Realtime Database.
+5. If maintenance mode is true in production, the app serves MaintenancePage instead of normal routes.
+6. Otherwise the router resolves the requested page, which is lazy loaded through React.lazy and Suspense.
+7. For admin dashboard routes, ProtectedRoute.jsx checks useAuth() state.
+8. AuthContext.jsx maintains user state using Firebase Auth and onAuthStateChanged().
+9. Shared query configuration, logging, SEO, notification display, and scroll reset continue across route changes.
 
 Functional requirements
 
-- FR-AC-01: The system must provide a unified admin dashboard for authenticated users.
-- FR-AC-02: The system must support CRUD operations for core content areas.
-- FR-AC-03: The system must allow media and image management where required.
-- FR-AC-04: The system must expose operational counts for dashboard context.
-- FR-AC-05: The system must preserve basic admin usability on mobile.
+- FR-PI-01: The system must initialize the app with global providers in the required order.
+- FR-PI-02: The system must expose the defined public and admin route map.
+- FR-PI-03: The system must restrict /admin/dashboard to authenticated users.
+- FR-PI-04: The system must support a production maintenance switch through config/maintenanceMode.
+- FR-PI-05: The system must initialize Firebase services from environment variables and log missing values clearly.
 
 Non functional requirements
 
-- Dashboard access requires authenticated routing and backend enforced write rules.
-- Admin flows should minimize repeated navigation with modals and tabbed sections.
-- Shared controls should behave consistently across content types.
-- Mutations should immediately invalidate related query keys.
-- Volunteer assignment and donation approval workflows should remain traceable through data fields or history structures.
+- The app should fail gracefully when analytics or maintenance reads fail.
+- Auth, environment variables, and route guarding must prevent accidental admin exposure.
+- Initialization errors must be visible in browser logs.
+- Route level code splitting should keep startup lean.
+- Shared services should provide one clear place to adjust cache, query, and auth behavior.
 
 Technical breakdown
 
-Dashboard shell
+Startup and routing files
 
-- src/pages/AdminDashboard.jsx
+- src/main.jsx
+- src/App.jsx
 
-Tab components
+Authentication and protection files
 
-- src/components/TeamManagement.jsx
-- src/components/StoriesTestimonialsManagement.jsx
-- src/components/BlogManagement.jsx
-- src/components/VolunteerManagement.jsx
-- src/components/BranchManagement.jsx
-- src/components/DonationManagement.jsx
-- src/components/EventManagement.jsx
-- src/components/GalleryManagement.jsx
-
-Modal and shared components
-
-- src/components/gallery/GalleryFormModal.jsx
-- src/components/team/TeamMemberFormModal.jsx
-- src/components/stories/StoryTestimonialFormModal.jsx
-- src/components/common/Modal.jsx
-- src/components/common/Button.jsx
-- src/components/common/LoadingSpinner.jsx
-- src/components/ImageUpload.jsx
-
-Supporting files
-
-- src/hooks/useFirebaseQueries.js
-- src/services/cachedDatabaseService.js
-- src/services/imageUploadService.js
 - src/context/AuthContext.jsx
-- src/context/NotificationContext.jsx
 - src/components/ProtectedRoute.jsx
+- src/pages/AdminLogin.jsx
 
-Representative hooks and methods
+Shared shell and utility files
 
-- useEvents, useGalleryItems, useVolunteers
-- CRUD hooks for blogs, team, stories, testimonials, branches, volunteers, events, gallery, and donations
-- addBlog, updateBlog, deleteBlog
-- addTeamMember, updateTeamMember, deleteTeamMember
-- addGalleryItem, updateGalleryItem, deleteGalleryItem
-- updateVolunteerStatus, assignVolunteerToBranch, updateDonationStatus
+- src/components/Navbar.jsx
+- src/components/Footer.jsx
+- src/components/ScrollToTop.jsx
+- src/components/ErrorBoundary.jsx
+- src/components/SEO.jsx
+- src/context/NotificationContext.jsx
+
+Config and service files
+
+- src/services/firebase.js
+- src/config/queryClient.jsx
+- src/services/cacheService.js
+- src/utils/adminSetup.js
+- src/utils/logger.js
+- src/utils/helpers.js
+- src/utils/validators.js
+- src/utils/sanitization.js
+- src/config/colors.js
+
+Build and deployment files
+
+- package.json
+- vite.config.js
+- tailwind.config.js
+- postcss.config.cjs
+- firebase.json
+- vercel.json
+
+Important exports
+
+- AuthProvider and useAuth()
+- QueryProvider and queryClient
+- Firebase exports db, rtdb, auth, storage, functions, analytics
+- showNotification, showSuccess, showError, showWarning, showInfo
 
 Security considerations
 
-- Client side route protection exists, but backend authorization is still required.
-- Admin actions should be backed by Firestore and Storage rules.
-- Uploaded images and rich content must be validated.
+- Missing or weak Firestore rules are the main systemic risk.
+- ProtectedRoute is necessary but not sufficient for backend authorization.
+- Environment variables must not leak secrets beyond intended public keys.
+- The Realtime Database maintenance path should be writable only by trusted operators.
 
 Performance considerations
 
-- The admin shell is lazy loaded.
-- Per tab loading isolates query cost to the active management area.
-- Stats may become more expensive as collections grow.
-- Shared cache invalidation reduces stale UI but can trigger broad refetching if query keys are not scoped well.
+- Lazy loaded routes reduce initial bundle size.
+- Query defaults enable controlled retry and refetch behavior.
+- Cache clearing on hard refresh improves freshness but reduces persistence benefits.
+- Notification rendering is lightweight.
 
 ## 3. Data and Automation
 
-Managed data areas
+Platform operations
 
-- team
-- successStories
-- testimonials
-- blogs
-- gallery
-- events
-- branches
-- volunteers
-- donations
-- donors for read and reporting through donation features
+- Read config/maintenanceMode from Realtime Database.
+- Subscribe to Firebase Auth state.
+- Initialize Firestore, Storage, Functions, and Analytics clients.
+- Clear app managed local cache on startup.
+
+Primary platform areas
+
+- Realtime Database path config/maintenanceMode
+- Firebase Auth
+- Firestore
+- Storage
+- Cloud Functions
+- Analytics
 
 Records created
 
-- Volunteer action_history entries within volunteer documents.
-- Media references and image URLs associated with content records.
-- No separate admin audit collection is visible in repository code.
+- No business child records are created directly by startup logic.
+- Authentication sessions and browser cache entries are managed implicitly by SDKs and cacheService.
 
 ## 4. Impacted Components
 
 Direct files
 
-- src/pages/AdminDashboard.jsx
-- management components under src/components
-- feature modals under src/components/gallery, src/components/team, and src/components/stories
-
-Indirect files
-
+- src/main.jsx
+- src/App.jsx
 - src/context/AuthContext.jsx
 - src/context/NotificationContext.jsx
 - src/components/ProtectedRoute.jsx
-- src/hooks/useFirebaseQueries.js
-- src/services/cachedDatabaseService.js
-- src/services/imageUploadService.js
-- src/services/emailService.js
-- src/App.jsx
+- src/components/ErrorBoundary.jsx
+- src/components/ScrollToTop.jsx
+- src/components/Navbar.jsx
+- src/components/Footer.jsx
+- src/services/firebase.js
+- src/config/queryClient.jsx
+- src/services/cacheService.js
+
+Indirect files
+
+- all src/pages files through routing
+- all src/hooks files through query configuration
+- all src/services files through Firebase client initialization
+- root build and hosting configuration files
 
 Impact notes
 
-- Because this is a consolidation layer, changes here often affect public modules.
-- Mutation contract changes in hooks or services affect one or more admin tabs.
-- Sidebar structure and active tab logic control discoverability of all managed areas.
-- Regressions in common modals or shared buttons can affect multiple workflows.
+- Changes in App.jsx or main.jsx affect the entire site.
+- Query client changes alter fetch behavior across all modules.
+- Firebase bootstrap changes can break every data dependent feature.
+- Weak route protection or auth state logic can expose or block admin areas globally.
 
 ## 5. Admin and Technical Notes
 
 Configuration requirements
 
-- Firebase Auth must be enabled and admin credentials must exist.
-- Firestore and Storage rules must support authorized admin operations.
-- Any EmailJS or function backed workflows used by management tabs must be configured.
+- .env must include all required Firebase variables referenced in src/services/firebase.js.
+- Realtime Database must contain a readable config/maintenanceMode path if maintenance control is used.
+- Auth providers and admin accounts must be configured in Firebase Auth.
+- Hosting configuration in firebase.json and vercel.json must preserve SPA routing.
 
 Permissions needed
 
-- Authenticated admin access to the dashboard route.
-- Write access to all managed content collections.
-- Storage write access for media uploads.
+- App runtime needs public Firebase initialization access.
+- Admin users need Firebase Auth credentials.
+- Only trusted operators should be able to change maintenance mode.
 
-Debug queries
+Debug checks
 
-- team orderBy order asc
-- blogs orderBy created_at desc
-- gallery orderBy uploaded_at desc
-- volunteers orderBy submitted_at desc
-- donors orderBy createdAt desc
+- Realtime Database read on config/maintenanceMode.
+- Firebase Auth current user state inspection.
 
 Common issues
 
-- Admin tab loads but data is blank because of permissions or missing indexes.
-- Image upload completes but the returned URL is not stored correctly.
-- Status updates appear stale until invalidation and refetch complete.
-- Dashboard access works for authenticated users who may not actually be intended admins if backend rules are weak.
+- Missing Firebase environment variables causing startup instability.
+- Admin route redirect loops caused by auth state not resolving.
+- Entire site showing the maintenance page because maintenanceMode is enabled in production.
+- Stale data confusion because cache is cleared only on hard refresh.
 
 Troubleshooting
 
-1. Confirm the admin user is authenticated and routed through ProtectedRoute.
-2. Check the relevant collection documents directly in Firestore.
-3. Validate image upload success and stored file URLs.
-4. Inspect React Query invalidation behavior after save operations.
-5. Review backend rules if writes succeed or fail unexpectedly.
+1. Confirm all required VITE_FIREBASE variables are present.
+2. Verify Firebase Auth can sign in and restore sessions on refresh.
+3. Check the Realtime Database value under config/maintenanceMode.
+4. Validate that hosting rewrites still point unknown routes to index.html.
+5. Inspect browser console initialization, auth, and query errors before troubleshooting feature modules.
