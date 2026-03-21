@@ -1,49 +1,42 @@
-# Dada Chi Shala — Project Architecture
+# Project Architecture
 
-> **Organization:** Educare (Dada Chi Shala) Educational Trust  
-> **Last Updated:** 2026-03-21
+Organization: Educare Dada Chi Shala Educational Trust
+Last updated: 2026-03-21
 
----
+## 1. Project overview
 
-## 1. Project Overview
+This is a full featured NGO website for Educare Dada Chi Shala Educational Trust, a Pune based organization providing free quality education to street and underprivileged children across Maharashtra.
 
-A full-featured NGO website for Educare (Dada Chi Shala) Educational Trust — a Pune-based organization providing free quality education to street and underprivileged children across Maharashtra.
+The application has two main faces.
 
-**Two faces of the application:**
-- **Public portal** — awareness, storytelling, events, gallery, volunteer registration, donations
-- **Admin dashboard** — secure content management for all data entities
+- Public portal for awareness, storytelling, events, gallery, volunteer registration, and donations.
+- Admin dashboard for secure content management.
 
----
+## 2. Tech stack
 
-## 2. Tech Stack
+- Framework: React 18.2
+- Build tool: Vite 7.x
+- Styling: Tailwind CSS 3.3
+- Routing: react-router-dom 6.15
+- Server state: @tanstack/react-query 5.x
+- Client state: React Context and Zustand
+- Forms: react-hook-form and yup
+- Animation: framer-motion 12.x
+- Icons: lucide-react
+- Database: Firebase Firestore
+- Auth: Firebase Authentication
+- File storage: Firebase Storage
+- Realtime config: Firebase Realtime Database
+- Cloud Functions: Firebase Functions v2
+- Analytics: Firebase Analytics
+- Payments: Razorpay
+- Client email: @emailjs/browser
+- Server email: nodemailer via Cloud Functions
+- SEO: react-helmet-async
 
-| Layer | Technology | Version |
-|-------|-----------|---------|
-| Framework | React | 18.2 |
-| Build Tool | Vite | 7.x |
-| Styling | Tailwind CSS | 3.3 |
-| Routing | react-router-dom | 6.15 (v7 future flags) |
-| Server State | @tanstack/react-query | 5.x |
-| Client State | React Context + Zustand | — |
-| Forms | react-hook-form + yup | — |
-| Animation | framer-motion | 12.x |
-| Icons | lucide-react | — |
-| Database | Firebase Firestore | — |
-| Auth | Firebase Authentication | — |
-| File Storage | Firebase Storage | — |
-| Realtime Config | Firebase Realtime Database | — |
-| Cloud Functions | Firebase Functions v2 | — |
-| Analytics | Firebase Analytics | — |
-| Payments | Razorpay | — |
-| Email (client) | @emailjs/browser | — |
-| Email (server) | nodemailer via Cloud Functions | — |
-| SEO | react-helmet-async | — |
+## 3. System architecture
 
----
-
-## 3. System Architecture
-
-```
+```text
 ┌─────────────────────────────────────────────────────────────────┐
 │                         BROWSER (SPA)                           │
 │                                                                 │
@@ -88,162 +81,50 @@ A full-featured NGO website for Educare (Dada Chi Shala) Educational Trust — a
           └────────────────────────────┘
 ```
 
----
+## 4. Folder structure
 
-## 4. Folder Structure
+Top level files and folders
 
-```
-(repo root)/
-│
-├── index.html                    # Vite HTML entry point
-├── vite.config.js                # Vite config — chunks, aliases, ports
-├── tailwind.config.js            # Tailwind theme — colors, spacing, screens
-├── postcss.config.cjs            # PostCSS
-├── firebase.json                 # Firebase Hosting config + rewrites
-├── vercel.json                   # Vercel SPA fallback config
-├── package.json
-│
-├── functions/                    # Firebase Cloud Functions (Node.js)
-│   ├── index.js                  # All callable + HTTP functions
-│   └── package.json
-│
-├── public/                       # Static assets (not processed by Vite)
-│   ├── manifest.json             # PWA manifest
-│   ├── robots.txt
-│   ├── sitemap.xml
-│   ├── icons/                    # Favicons + PWA icons
-│   ├── images/                   # Static bitmap images
-│   └── logos/                    # Brand logos
-│
-├── doc/                          # Knowledge Base module docs
-│   ├── 01-public-storytelling-module.md
-│   ├── 02-events-module.md
-│   ├── 03-community-engagement-module.md
-│   ├── 04-donations-fundraising-module.md
-│   ├── 05-admin-content-management-module.md
-│   ├── 06-platform-infrastructure-auth-module.md
-│   └── quick-reference.md        # ← Fast lookup: collections, hooks, envs
-│
-└── src/                          # Application source
-    ├── App.jsx                   # Root: providers, router, maintenance check
-    ├── main.jsx                  # React DOM render entry
-    ├── index.css                 # Tailwind directives + custom animations
-    │
-    ├── pages/                    # Route-level components (all lazy-loaded)
-    │   ├── HomePage.jsx          # Hero, counters, events, stories, awards
-    │   ├── AboutPage.jsx         # Mission, vision, focus areas
-    │   ├── BranchesPage.jsx      # Branch listing + hero slider
-    │   ├── TeamPage.jsx          # Team members with social links
-    │   ├── GalleryPage.jsx       # Photos, videos, blogs, awards
-    │   ├── EventsPage.jsx        # Event listing with status badges
-    │   ├── DonatePage.jsx        # Razorpay + bank transfer
-    │   ├── VolunteerPage.jsx     # 4-step registration form
-    │   ├── ContactPage.jsx       # EmailJS form + map
-    │   ├── MediaPage.jsx         # News, videos, press coverage
-    │   ├── AdminLogin.jsx        # Firebase Auth login
-    │   ├── AdminDashboard.jsx    # Full admin panel (tabbed)
-    │   ├── MaintenancePage.jsx   # Shown when RTDB killswitch is ON
-    │   └── NotFoundPage.jsx      # 404
-    │
-    ├── components/               # Reusable UI components
-    │   ├── Navbar.jsx            # Top nav with mobile hamburger
-    │   ├── Footer.jsx            # Site footer
-    │   ├── ProtectedRoute.jsx    # Auth guard for admin routes
-    │   ├── ErrorBoundary.jsx     # Top-level error catch + retry
-    │   ├── ScrollToTop.jsx       # Auto-scroll on route change
-    │   ├── SEO.jsx               # react-helmet-async wrapper
-    │   ├── AnimatedCounter.jsx   # Impact number counter animation
-    │   ├── ImageUpload.jsx       # Firebase Storage upload widget
-    │   ├── AdminSetup.jsx        # One-time admin account bootstrap
-    │   │
-    │   ├── common/               # Generic shared primitives
-    │   │   ├── Button.jsx
-    │   │   ├── FormInput.jsx
-    │   │   └── index.js          # Barrel export
-    │   │
-    │   ├── gallery/              # Gallery sub-components
-    │   ├── stories/              # Stories/Testimonials sub-components
-    │   └── team/                 # Team sub-components
-    │       (+ domain-specific cards, forms, modals)
-    │   ├── EventCard.jsx / EventForm.jsx / EventDetails.jsx
-    │   ├── GalleryCard.jsx / GalleryForm.jsx / GalleryGrid.jsx
-    │   ├── BlogCard.jsx / BlogModal.jsx
-    │   ├── BranchCard.jsx
-    │   └── Card.jsx              # Generic content card
-    │
-    │   (Admin management panels — one per entity)
-    │   ├── EventManagement.jsx
-    │   ├── GalleryManagement.jsx
-    │   ├── BlogManagement.jsx
-    │   ├── BranchManagement.jsx
-    │   ├── TeamManagement.jsx
-    │   ├── StoriesTestimonialsManagement.jsx
-    │   ├── VolunteerManagement.jsx
-    │   └── DonationManagement.jsx
-    │
-    ├── hooks/                    # Custom React hooks
-    │   ├── useFirebaseQueries.js # ALL React Query hooks (reads + mutations)
-    │   ├── useCRUD.js            # Generic CRUD helper hook
-    │   └── useFirestore.js       # Low-level Firestore hook
-    │
-    ├── services/                 # External service integrations
-    │   ├── firebase.js           # Firebase app init + service exports
-    │   ├── cachedDatabaseService.js  # Firestore abstraction (all writes go here)
-    │   ├── cacheService.js       # Dual-layer cache (memory + localStorage)
-    │   ├── imageUploadService.js # Firebase Storage upload helpers
-    │   ├── emailService.js       # EmailJS client-side email
-    │   └── razorpayService.js    # Razorpay SDK helpers
-    │
-    ├── context/                  # React Context providers
-    │   ├── AuthContext.jsx       # Firebase Auth state + login/logout methods
-    │   └── NotificationContext.jsx # Global toast/notification state
-    │
-    ├── config/                   # App-level configuration
-    │   ├── colors.js             # Shared color constants
-    │   └── queryClient.jsx       # React Query client setup (5-min stale time)
-    │
-    └── utils/                    # Pure utility functions
-        ├── sanitization.js       # XSS prevention — sanitizeString, sanitizeEmail, etc.
-        ├── validators.js         # Yup-based schema validators
-        ├── formatters.js         # Date, currency, text formatters
-        ├── helpers.js            # General-purpose helpers
-        ├── colorUtils.js         # Color manipulation utilities
-        ├── logger.js             # Logging abstraction
-        └── adminSetup.js         # One-time admin user bootstrap utility
+- index.html for the Vite HTML entry point
+- vite.config.js for build configuration
+- tailwind.config.js for theme configuration
+- postcss.config.cjs for PostCSS
+- firebase.json for Firebase Hosting rewrites
+- vercel.json for Vercel SPA fallback
+- package.json
+- functions for Firebase Cloud Functions
+- public for static assets
+- src for application source
+- markdown knowledge base files at the repository root
+
+## 5. Routing architecture
+
+All routes are defined in src/App.jsx using react-router-dom v6.
+
+```text
+/                    -> HomePage
+/about               -> AboutPage
+/branches            -> BranchesPage
+/team                -> TeamPage
+/gallery             -> GalleryPage
+/events              -> EventsPage
+/donate              -> DonatePage
+/volunteer           -> VolunteerPage
+/contact             -> ContactPage
+/media               -> MediaPage
+/admin               -> redirect to /admin/login
+/admin/login         -> AdminLogin
+/admin/dashboard     -> AdminDashboard through ProtectedRoute
+*                    -> NotFoundPage
 ```
 
----
+When config/maintenanceMode is true in Firebase Realtime Database in production, the entire app renders MaintenancePage.
 
-## 5. Routing Architecture
+## 6. Data flow architecture
 
-All routes are defined in `src/App.jsx` using react-router-dom v6.
+Read path
 
-```
-/                    → HomePage          (public)
-/about               → AboutPage         (public)
-/branches            → BranchesPage      (public)
-/team                → TeamPage          (public)
-/gallery             → GalleryPage       (public)
-/events              → EventsPage        (public)
-/donate              → DonatePage        (public)
-/volunteer           → VolunteerPage     (public)
-/contact             → ContactPage       (public)
-/media               → MediaPage         (public)
-/admin               → redirect → /admin/login
-/admin/login         → AdminLogin        (public)
-/admin/dashboard     → AdminDashboard    (ProtectedRoute — Firebase Auth required)
-*                    → NotFoundPage
-```
-
-**Maintenance mode override:** When `config/maintenanceMode = true` in Firebase RTDB (production only), the entire app renders `MaintenancePage`. Admin routes still accessible in development.
-
----
-
-## 6. Data Flow Architecture
-
-### Read Path
-
-```
+```text
 Component
   └─► useXxx() hook  (useFirebaseQueries.js)
         └─► React Query  (cache check: staleTime 1–5 min)
@@ -252,9 +133,9 @@ Component
                           └─► Firestore SDK  (on cache miss)
 ```
 
-### Write Path
+Write path
 
-```
+```text
 Component / Form
   └─► useAddXxx() / useUpdateXxx() mutation  (useFirebaseQueries.js)
         └─► cachedDatabaseService.addXxx() / updateXxx()
@@ -263,9 +144,9 @@ Component / Form
               └─► queryClient.invalidateQueries()  (React Query cache bust)
 ```
 
-### Donation Payment Flow
+Donation payment flow
 
-```
+```text
 User fills form
   └─► razorpayService  (calls Cloud Function: createRazorpayOrder)
         └─► Cloud Function creates Razorpay order + pending Firestore doc
@@ -277,176 +158,113 @@ User fills form
                           └─► sendDonationReceipt (email via nodemailer)
 ```
 
----
+## 7. Firestore collections summary
 
-## 7. Firestore Collections Summary
+- events for event listings with fields such as title, event_date, and status
+- gallery for photos, videos, and awards with fields such as url, category, and type
+- successStories for student stories with fields such as name, story, and image_url
+- testimonials for supporter testimonials with fields such as name, role, and message
+- blogs for blog posts with fields such as title, content, and published
+- team for team profiles with fields such as name, role, category, and order
+- awards for award recognitions with fields such as title, year, and organization
+- news for press coverage with fields such as title, url, and source
+- videos for video embeds with fields such as title, embed_url, and category
+- branches for branch locations with fields such as name, location, and coordinator
+- volunteers for volunteer applications with fields such as personal_info and application_status
+- donations for payment records with fields such as razorpayOrderId, amount, and status
+- donors for donor records with fields such as name, email, and panNumber
+- Realtime Database path config/maintenanceMode as a site wide kill switch
 
-| Collection | Purpose | Key Fields |
-|-----------|---------|-----------|
-| `events` | Events listing | `title`, `event_date`, `status` |
-| `gallery` | Photos / videos / awards | `url`, `category`, `type` |
-| `successStories` | Student success stories | `name`, `story`, `image_url` |
-| `testimonials` | Supporter testimonials | `name`, `role`, `message` |
-| `blogs` | Blog posts | `title`, `content`, `published` |
-| `team` | Team member profiles | `name`, `role`, `category`, `order` |
-| `awards` | Award recognitions | `title`, `year`, `organization` |
-| `news` | News / press coverage | `title`, `url`, `source` |
-| `videos` | Video embeds | `title`, `embed_url`, `category` |
-| `branches` | Branch locations | `name`, `location`, `coordinator` |
-| `volunteers` | Volunteer applications | `personal_info`, `application_status` |
-| `donations` | Payment records | `razorpayOrderId`, `amount`, `status` |
-| `donors` | Donor registry | `name`, `email`, `panNumber` |
+## 8. Cloud Functions
 
-**Realtime Database (RTDB):**
+The main functions in functions/index.js are:
 
-| Path | Type | Purpose |
-|------|------|---------|
-| `config/maintenanceMode` | boolean | Site-wide killswitch |
+- createRazorpayOrder using onCall to create an order and pending donation record
+- verifyRazorpayPayment using onCall to verify HMAC and mark a donation complete
+- razorpayWebhook using onRequest for asynchronous Razorpay events
+- sendDonationReceipt using onCall to send receipt email
+- sendVolunteerConfirmation using onCall to send volunteer confirmation email
 
----
+Secrets remain in environment configuration and must never be exposed to the client.
 
-## 8. Cloud Functions (functions/index.js)
+## 9. Caching strategy
 
-All functions use Firebase Functions v2 (`firebase-functions/v2`). Secrets are env vars — never exposed to client.
+The cache design has two layers in cacheService.js.
 
-| Function | Type | Purpose |
-|---------|------|---------|
-| `createRazorpayOrder` | `onCall` | Create Razorpay order + pending donation doc |
-| `verifyRazorpayPayment` | `onCall` | HMAC verify + mark donation completed |
-| `razorpayWebhook` | `onRequest` | Webhook handler for async Razorpay events |
-| `sendDonationReceipt` | `onCall` | Send receipt email via nodemailer |
-| `sendVolunteerConfirmation` | `onCall` | Send confirmation email to new volunteer |
+- L1 is an in memory map for process lifetime.
+- L2 is localStorage for browser session persistence.
 
----
+React Query adds another cache layer with collection specific stale times.
 
-## 9. Caching Strategy
+- Events and upcoming events use about 1 minute.
+- Gallery uses about 2 minutes.
+- Other collections use the 5 minute default.
 
-**Dual-layer architecture (`cacheService.js`):**
+On any mutation, cacheService.invalidateCollection() and queryClient.invalidateQueries() run together.
 
-| Layer | Storage | Scope | TTL |
-|-------|---------|-------|-----|
-| L1 | In-memory Map | Process lifetime | Configurable |
-| L2 | localStorage | Browser session | Configurable |
+## 10. Build and deployment
 
-**React Query on top** provides an additional query-level cache with collection-specific stale times:
-- Events / upcoming events: **1 minute**
-- Gallery: **2 minutes**
-- Other collections: **5 minutes** (React Query default)
+Build commands
 
-On any mutation, `cacheService.invalidateCollection()` + `queryClient.invalidateQueries()` both fire to keep all layers in sync.
+- npm run dev starts the Vite dev server.
+- npm run build creates the production build in dist.
+- npm run build-vercel creates the Vercel build.
 
----
+Deployment targets
 
-## 10. Build & Deployment
+- Firebase Hosting using firebase.json for SPA rewrites to index.html.
+- Vercel using vercel.json for SPA fallback rewrite.
 
-### Build Commands
+Client environment variables
 
-| Command | Purpose |
-|---------|---------|
-| `npm run dev` | Start Vite dev server on port 3000 |
-| `npm run build` | Production build → `dist/` |
-| `npm run build-vercel` | Vercel deployment build |
+- VITE_FIREBASE_API_KEY required
+- VITE_FIREBASE_AUTH_DOMAIN required
+- VITE_FIREBASE_PROJECT_ID required
+- VITE_FIREBASE_STORAGE_BUCKET required
+- VITE_FIREBASE_MESSAGING_SENDER_ID required
+- VITE_FIREBASE_APP_ID required
+- VITE_FIREBASE_MEASUREMENT_ID optional
+- VITE_FIREBASE_DATABASE_URL optional
+- VITE_RAZORPAY_KEY_ID required for client side checkout only
+- VITE_EMAILJS variables for EmailJS configuration
 
-### Code Splitting Chunks (Vite rollupOptions)
+Cloud Function secrets such as RAZORPAY_KEY_SECRET and EMAIL_PASSWORD remain server side.
 
-| Chunk | Modules |
-|-------|---------|
-| `vendor` | `react`, `react-dom` |
-| `firebase` | Firebase app, Firestore, Auth, Storage |
-| `ui` | framer-motion, lucide-react, react-modal |
-| `forms` | react-hook-form, @hookform/resolvers, yup |
-| `utils` | @emailjs/browser |
+## 11. Coding standards
 
-### Deployment Targets
+Component conventions
 
-| Target | Config File | Notes |
-|--------|------------|-------|
-| Firebase Hosting | `firebase.json` | SPA rewrites → `index.html` |
-| Vercel | `vercel.json` | SPA fallback rewrite |
+- Use PascalCase for components.
+- Use the useXxx prefix for hooks.
+- Use camelCase for service functions.
+- Lazy load pages with React.lazy() and Suspense.
+- Always wrap admin routes in ProtectedRoute.
 
-### Environment Variables (all `VITE_` prefixed for client)
+Data access rules
 
-| Variable | Required |
-|---------|---------|
-| `VITE_FIREBASE_API_KEY` | Yes |
-| `VITE_FIREBASE_AUTH_DOMAIN` | Yes |
-| `VITE_FIREBASE_PROJECT_ID` | Yes |
-| `VITE_FIREBASE_STORAGE_BUCKET` | Yes |
-| `VITE_FIREBASE_MESSAGING_SENDER_ID` | Yes |
-| `VITE_FIREBASE_APP_ID` | Yes |
-| `VITE_FIREBASE_MEASUREMENT_ID` | Optional |
-| `VITE_FIREBASE_DATABASE_URL` | Optional (auto-derived) |
-| `VITE_RAZORPAY_KEY_ID` | Yes (client-side key only) |
-| `VITE_EMAILJS_*` | Yes (EmailJS config) |
+- Firestore reads must use hooks from useFirebaseQueries.js.
+- Firestore writes must go through cachedDatabaseService.js methods.
+- Direct Firestore SDK calls in components are forbidden.
+- Every mutation must invalidate related query keys.
 
-Cloud Function secrets (`RAZORPAY_KEY_SECRET`, `EMAIL_PASSWORD`, etc.) are set via Firebase env config — never in client code.
+Forms and security
 
----
+- Use react-hook-form, resolvers, and yup.
+- Sanitize user input before Firestore writes through src/utils/sanitization.js.
+- Keep payment secrets in Cloud Functions only.
+- Verify Razorpay payment signatures server side only.
+- Restrict URLs to safe protocols.
 
-## 11. Coding Standards
+Styling and errors
 
-### Component Conventions
+- Use Tailwind CSS utility classes and keep custom styling in index.css where needed.
+- Use the configured color system in tailwind.config.js.
+- ErrorBoundary in App.jsx handles render failures.
+- Email and notification failures must not block data writes.
 
-| Rule | Standard |
-|------|---------|
-| Naming | PascalCase for components (`EventCard.jsx`) |
-| Hooks | `useXxx` prefix (`useEvents`, `useAddEvent`) |
-| Services | camelCase functions (`getEvents`, `addEvent`) |
-| Pages | Lazy-loaded with `React.lazy()` + `Suspense` |
-| Admin routes | Always wrapped in `<ProtectedRoute>` |
+## 12. Authentication flow
 
-### Data Access Rules
-
-| Operation | Required Approach |
-|-----------|-----------------|
-| Firestore reads | React Query hooks from `useFirebaseQueries.js` |
-| Firestore writes | Through `cachedDatabaseService.js` methods |
-| Direct Firestore SDK in components | **Forbidden** |
-| After any mutation | `queryClient.invalidateQueries()` required |
-
-### Forms
-
-- Library: `react-hook-form` + `@hookform/resolvers` + `yup`
-- All user input sanitized before Firestore write via `src/utils/sanitization.js`
-- Sanitizers available: `sanitizeString`, `sanitizeEmail`, `sanitizePhone`, `sanitizeUrl`, `sanitizeObject`
-
-### Security Rules
-
-| Concern | Enforcement |
-|---------|-----------|
-| XSS prevention | All user input through `sanitization.js` before DB write |
-| Admin auth | `ProtectedRoute` on all `/admin/dashboard` routes |
-| Secrets | Razorpay key secret, email passwords — Cloud Functions env only |
-| HMAC verification | Razorpay payment signature verified server-side only |
-| Protocol validation | `sanitizeUrl()` allows only `http:` / `https:` |
-
-### Styling
-
-- **Tailwind CSS** utility classes only — no separate CSS files except `index.css` for custom animations
-- Theme colors defined in `tailwind.config.js`:
-  - `primary` — Dark Purple-Blue (`#191947`)
-  - `secondary` — Warm Orange/Gold (`#eba645`)
-  - `neutral` — Custom gray scale
-  - Semantic: `success`, `warning`, `error`
-- Mobile-first responsive design; custom `xs` breakpoint at `475px`
-
-### Error Handling
-
-- Top-level `<ErrorBoundary>` in `App.jsx` catches render errors with retry UI
-- Email/notification failures must not block data writes
-- Firebase init failures default gracefully (site loads normally, maintenance defaults `false`)
-
-### Comments & Documentation
-
-- Comments only where logic is non-obvious
-- No docstrings on every function
-- KB files in `doc/` are the source of truth — update them when requirements change
-
----
-
-## 12. Authentication Flow
-
-```
+```text
 User hits /admin/dashboard
   └─► ProtectedRoute checks AuthContext.currentUser
         ├─► null  → redirect to /admin/login
@@ -458,18 +276,14 @@ User hits /admin/dashboard
               └─► redirect to /admin/dashboard
 ```
 
-Only one admin account is intended. Account bootstrapped via `src/utils/adminSetup.js` + `AdminSetup.jsx` (one-time use).
+Only one admin account is intended. It is bootstrapped through src/utils/adminSetup.js and AdminSetup.jsx for one time use.
 
----
+## 13. Key architectural decisions
 
-## 13. Key Architectural Decisions
-
-| Decision | Rationale |
-|---------|-----------|
-| Single SPA for public + admin | Simpler deployment; code-split mitigates bundle size |
-| React Query as data layer | Automatic caching, background refetch, optimistic updates |
-| `cachedDatabaseService` abstraction | Single place to add/modify Firestore logic; components stay pure |
-| Dual-layer cache (memory + localStorage) | Reduces Firestore read costs; fast repeat page loads |
-| Cloud Functions for payment | Razorpay secret never touches client; HMAC verify is server-only |
-| Firebase Realtime DB for maintenance | Instant toggle without re-deploy; zero polling cost |
-| `VITE_` env var prefix | Vite requirement; prevents accidental server-secret leakage |
+- Single SPA for public and admin to simplify deployment, with code splitting to control bundle size.
+- React Query as the data layer for caching and background refetch.
+- cachedDatabaseService as the Firestore abstraction so components stay simpler.
+- Dual layer cache using memory and localStorage to reduce Firestore reads.
+- Cloud Functions for payment so secrets never touch the client and HMAC verification stays server side.
+- Firebase Realtime Database for maintenance mode so the site can be toggled without redeploy.
+- VITE prefixed variables for client configuration so server secrets are not mixed into client code.
