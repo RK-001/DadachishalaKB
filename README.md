@@ -1,263 +1,131 @@
-# Dada Chi Shala — Knowledge Base & Project Guide
+# Dada Chi Shala Knowledge Base and Project Guide
 
-> **Organization:** Educare (Dada Chi Shala) Educational Trust  
-> **Scope:** NGO Website — Public Portal + Admin Dashboard + Cloud Backend  
-> **Tech Foundation:** React 18 · Vite · Tailwind CSS · Firebase · Razorpay  
-> **Last Updated:** 2026-03-09
+Organization: Educare Dada Chi Shala Educational Trust
+Scope: NGO website with public portal, admin dashboard, and cloud backend
+Tech foundation: React 18, Vite, Tailwind CSS, Firebase, Razorpay
+Last updated: 2026-03-21
 
----
+## Agent starting point
 
-## For AI Agents / Chat Agents
+This README is the entry point for anyone using this knowledge base.
 
-This README is the **entry point** for any AI agent working on this codebase. Start here, then follow the navigation below:
+Read in this order:
 
-| Agent Priority | File | When to Read |
-|----------------|------|-------------|
-| 1 (Always) | `INDEX.md` | Navigation + keyword lookup + agent rules |
-| 2 (Always) | Target doc from INDEX | Relevant module detail |
-| 3 (Usually) | `doc/quick-reference.md` | Firestore schema, hooks, environment variables |
-| 4 (Rare) | Individual `doc/0N-*.md` files | Deep module-level technical context |
+1. INDEX.md for navigation, keyword lookup, and routing.
+2. The target module file identified by INDEX.md.
+3. qc_quick_reference.md for collections, hooks, services, environment variables, and common issues.
+4. ARCHITECTURE.md when the task needs system level context.
 
-**Never guess field names, collection names, or component APIs** — look them up in `doc/quick-reference.md` first.
+Do not guess field names, collection names, hooks, or service methods. Look them up in qc_quick_reference.md first.
 
----
+## Project summary
 
-# Dada Chi Shala Website
+This knowledge base describes a React and Firebase application for Educare Dada Chi Shala Educational Trust. The website supports public storytelling, events, branches, volunteers, donations, media, and an admin dashboard for content management.
 
-A modern, full-featured NGO website for **Educare (Dada Chi Shala) Education Trust** — a Pune-based organization providing free quality education to street and underprivileged children across Maharashtra.
+## Main capability areas
 
-Built with React 18, Vite, Tailwind CSS, and Firebase.
+Public experience
 
----
+- Home page with storytelling, counters, events, stories, and awards.
+- About page with mission, vision, and impact.
+- Branches page with branch information.
+- Team page with founders, team members, and volunteers.
+- Gallery and media pages for photos, videos, blogs, awards, and press coverage.
+- Events page for event listings.
+- Donate page for Razorpay and manual transfer flows.
+- Volunteer page for a four step registration form.
+- Contact page for organization contact workflows.
 
-## Features
+Admin experience
 
-### Public Pages
-| Page | Description |
-|------|-------------|
-| **Home** | Hero slider, animated impact counters, events carousel, success stories, testimonials, awards |
-| **About** | Origin story, vision & mission, focus areas, impact stats |
-| **Branches** | Branch locations with hero slider and details panel |
-| **Team** | Founders, core team, volunteers with social links |
-| **Gallery** | Photo gallery, video gallery, blogs, awards — with lightbox modals |
-| **Events** | Event listing with status badges, date/time, location, Google Maps links |
-| **Donate** | Razorpay online payment + manual bank transfer with QR code & receipt upload |
-| **Volunteer** | Multi-step registration form (4 steps) with email confirmation |
-| **Contact** | Contact form (EmailJS), contact info cards, Google Maps embed |
-| **Media** | News/press coverage, video embeds, awards & recognitions |
+- Firebase Auth based login.
+- Admin dashboard with management panels for events, gallery, blogs, branches, team, stories, testimonials, volunteers, and donations.
 
-### Admin Dashboard
-- Secure Firebase Auth login (`/admin`)
-- **Responsive sidebar** with mobile hamburger toggle
-- Management panels for: Events, Gallery, Blogs, Branches, Team, Stories/Testimonials, Volunteers, Donations
+Technical features
 
-### Technical Features
-- **Code splitting** — React.lazy + Suspense for all page routes
-- **Error boundary** — graceful error handling with retry
-- **Scroll-to-top** on route changes
-- **404 page** with helpful navigation links
-- **Maintenance mode** — toggled via Firebase Realtime Database
-- **SEO** — per-page meta tags and JSON-LD structured data via react-helmet-async
-- **Caching** — dual-layer (memory + localStorage) cache wrapping Firebase calls
-- **React Query** — centralized data fetching with 5-min stale time
-- **Input sanitization** — XSS prevention on all user inputs
-- **Responsive design** — mobile-first with Tailwind CSS
+- Route level code splitting with React.lazy and Suspense.
+- Error boundary and scroll restoration.
+- Maintenance mode through Firebase Realtime Database.
+- SEO metadata support.
+- React Query for data fetching and cache refresh.
+- Dual layer caching through memory and localStorage.
+- Input sanitization before database writes.
 
----
+## Knowledge base file map
 
-## Tech Stack
+- 01-public-storytelling-module.md for public pages and storytelling content.
+- 02-events-module.md for event listing and event management.
+- 03-community-engagement-module.md for volunteers and branches.
+- 04-donations-fundraising-module.md for donation and payment flows.
+- 05-admin-content-management-module.md for the admin dashboard and CRUD screens.
+- 06-platform-infrastructure-auth-module.md for routing, auth, Firebase setup, and shared services.
+- ARCHITECTURE.md for system level structure and data flow.
+- qc_quick_reference.md for fast field, hook, service, and environment lookup.
+- copilot-instructions.md for repository working rules.
+- INDEX.md for navigation.
 
-| Layer | Technology |
-|-------|-----------|
-| Framework | React 18.2 + Vite 7 |
-| Styling | Tailwind CSS 3.3 |
-| Routing | react-router-dom 6.15 (v7 future flags) |
-| State/Data | @tanstack/react-query 5, React Context |
-| Forms | react-hook-form + @hookform/resolvers + yup |
-| Animation | framer-motion |
-| Icons | lucide-react |
-| Database | Firebase Firestore |
-| Auth | Firebase Authentication (email/password) |
-| Storage | Firebase Storage |
-| Realtime | Firebase Realtime Database (maintenance mode) |
-| Cloud Functions | Firebase Functions (Razorpay, emails) |
-| Analytics | Firebase Analytics |
-| Payments | Razorpay |
-| Email | emailjs-com (client-side) + Firebase Functions (server-side) |
-| SEO | react-helmet-async |
+## Setup summary
 
----
+Prerequisites
 
-## Project Structure
+- Node.js 20.19 or newer, or Node.js 22.12 or newer.
+- Firebase project.
+- EmailJS account if the contact flow uses it.
+- Razorpay account if online payments are enabled.
 
-```
-src/
-├── App.jsx                    # Root: routing, providers, maintenance mode
-├── main.jsx                   # Entry point: React DOM render
-├── index.css                  # Tailwind + custom animations & utilities
-│
-├── pages/                     # Route-level components (lazy-loaded)
-│   ├── HomePage.jsx           # Hero, counters, events, stories, awards
-│   ├── AboutPage.jsx          # Mission, vision, impact stats
-│   ├── BranchesPage.jsx       # Branch cards + hero slider
-│   ├── TeamPage.jsx           # Team members grid
-│   ├── GalleryPage.jsx        # Photos, videos, blogs, awards
-│   ├── EventsPage.jsx         # Events list with React Query
-│   ├── DonatePage.jsx         # Razorpay + manual payment
-│   ├── VolunteerPage.jsx      # 4-step registration form
-│   ├── ContactPage.jsx        # Contact form + map
-│   ├── MediaPage.jsx          # News, videos, awards
-│   ├── AdminLogin.jsx         # Firebase Auth login
-│   ├── AdminDashboard.jsx     # Admin panel with sidebar
-│   ├── MaintenancePage.jsx    # Maintenance mode screen
-│   └── NotFoundPage.jsx       # 404 error page
-│
-├── components/                # Shared UI components
-│   ├── Navbar.jsx             # Responsive nav with mobile menu
-│   ├── Footer.jsx             # Site footer with links & social
-│   ├── ErrorBoundary.jsx      # React error boundary
-│   ├── ScrollToTop.jsx        # Scroll restoration on navigation
-│   ├── SEO.jsx                # Helmet meta tags + JSON-LD
-│   ├── ProtectedRoute.jsx     # Auth guard for admin routes
-│   ├── AnimatedCounter.jsx    # Number counting animation
-│   ├── Card.jsx               # Reusable card component
-│   ├── EventCard.jsx          # Event display card
-│   ├── common/                # Button, FormInput, Modal, LoadingSpinner
-│   ├── gallery/               # GalleryFormModal, GalleryItemCard
-│   ├── stories/               # StoryTestimonialCard, StoryTestimonialFormModal
-│   └── team/                  # TeamMemberCard, TeamMemberFormModal
-│
-├── services/                  # External service integrations
-│   ├── firebase.js            # Firebase app init + service exports
-│   ├── cachedDatabaseService.js # CRUD operations with cache layer
-│   ├── cacheService.js        # Dual-layer cache (memory + localStorage)
-│   ├── razorpayService.js     # Razorpay payment integration
-│   ├── emailService.js        # EmailJS client-side emails
-│   └── imageUploadService.js  # Firebase Storage uploads
-│
-├── hooks/                     # Custom React hooks
-│   ├── useFirebaseQueries.js  # React Query hooks for all collections
-│   ├── useCRUD.js             # Generic CRUD mutation hooks
-│   └── useFirestore.js        # Low-level Firestore hook
-│
-├── context/                   # React Context providers
-│   ├── AuthContext.jsx        # Firebase Auth state
-│   └── NotificationContext.jsx # Toast notifications
-│
-├── config/
-│   ├── colors.js              # Color system configuration
-│   └── queryClient.jsx        # React Query client config
-│
-└── utils/
-    ├── sanitization.js        # XSS prevention (sanitizeString, sanitizeUrl, etc.)
-    ├── validators.js          # Form validation + re-exports from sanitization
-    ├── helpers.js             # formatDate, formatCurrency, truncateText, etc.
-    ├── formatters.js          # Additional formatting utilities
-    ├── colorUtils.js          # Color manipulation
-    ├── logger.js              # Logging utility
-    └── adminSetup.js          # Admin account setup
-```
+Install
 
----
+1. Clone the repository.
+2. Open the project root.
+3. Run npm install.
 
-## Setup
+Required client environment values
 
-### Prerequisites
-- Node.js v20.19+ or v22.12+
-- Firebase project
-- EmailJS account (optional, for contact form)
-- Razorpay account (optional, for online payments)
+- VITE_FIREBASE_API_KEY
+- VITE_FIREBASE_AUTH_DOMAIN
+- VITE_FIREBASE_PROJECT_ID
+- VITE_FIREBASE_STORAGE_BUCKET
+- VITE_FIREBASE_MESSAGING_SENDER_ID
+- VITE_FIREBASE_APP_ID
+- VITE_FIREBASE_DATABASE_URL when Realtime Database URL is not auto derived
+- VITE_EMAILJS_SERVICE_ID when EmailJS is used
+- VITE_EMAILJS_TEMPLATE_ID when EmailJS is used
+- VITE_EMAILJS_PUBLIC_KEY when EmailJS is used
+- VITE_RAZORPAY_KEY_ID when Razorpay checkout is used
 
-### Installation
+Firebase setup summary
 
-```bash
-# Clone and install
-git clone <repository-url>
-cd dadachishala-website
-npm install
-```
+1. Create a Firebase project.
+2. Enable Firestore Database.
+3. Enable Authentication with Email and Password.
+4. Enable Storage.
+5. Enable Realtime Database for maintenance mode.
+6. Deploy Cloud Functions if Razorpay or server side email is required.
 
-### Environment Variables
+Run commands
 
-Create a `.env` file in the project root:
+- npm run dev for development.
+- npm run build for production build.
+- firebase deploy or vercel deploy depending on the hosting target.
 
-```env
-# Firebase
-VITE_FIREBASE_API_KEY=your_api_key
-VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
-VITE_FIREBASE_PROJECT_ID=your_project_id
-VITE_FIREBASE_STORAGE_BUCKET=your_storage_bucket
-VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-VITE_FIREBASE_APP_ID=your_app_id
-VITE_FIREBASE_DATABASE_URL=your_rtdb_url
+## Primary collections
 
-# EmailJS
-VITE_EMAILJS_SERVICE_ID=your_service_id
-VITE_EMAILJS_TEMPLATE_ID=your_template_id
-VITE_EMAILJS_USER_ID=your_user_id
+- events
+- branches
+- gallery
+- successStories
+- testimonials
+- blogs
+- awards
+- news
+- videos
+- volunteers
+- donations
+- donors
+- team
 
-# Razorpay
-VITE_RAZORPAY_KEY_ID=your_razorpay_key
-```
+## Deployment summary
 
-### Firebase Setup
-
-1. Create a project at [Firebase Console](https://console.firebase.google.com/)
-2. Enable **Firestore Database**
-3. Enable **Authentication** (Email/Password provider)
-4. Enable **Storage**
-5. Enable **Realtime Database** (for maintenance mode flag)
-6. Deploy Cloud Functions from the `functions/` directory
-
-### Running
-
-```bash
-# Development
-npm run dev
-
-# Production build
-npm run build
-
-# Deploy to Vercel
-vercel deploy
-```
-
----
-
-## Firestore Collections
-
-| Collection | Key Fields |
-|-----------|------------|
-| `events` | event_name, description, event_date, location, imageURL, status |
-| `branches` | branch_name, description, imageURL, location |
-| `gallery` | title, imageURL, category, description |
-| `successStories` | name, story, imageURL |
-| `testimonials` | name, testimonial, role, imageURL |
-| `blogs` | title, content, imageURL, category, createdAt |
-| `awards` | title, description, imageURL, year |
-| `news` | title, source, imageURL, publishedAt |
-| `videos` | title, youtubeUrl, description |
-| `donors` | firstName, lastName, email, phoneno, amount, status, screenshotURL |
-| `contact` | first_name, last_name, email, phoneno, skills, availability, status |
-| `teamMembers` | name, role, bio, imageURL, socialLinks |
-
----
-
-## Deployment
-
-### Vercel (configured)
-The project includes `vercel.json` with SPA rewrites. Push to your Git repo and connect to Vercel.
-
-### Firebase Hosting
-```bash
-npm install -g firebase-tools
-firebase login
-firebase init hosting
-firebase deploy
-```
-
----
-
-## License
-
-MIT
+- Firebase Hosting and Vercel both rely on SPA rewrites.
+- Keep client side secrets out of the repository.
+- Keep payment and email secrets in server side function configuration only.
