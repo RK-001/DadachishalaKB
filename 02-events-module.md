@@ -1,36 +1,38 @@
-# Module 2: Events Management
+# Module 2 Events Management
 
-| VERSION | DATE | CREATOR | REVIEWER | ORGANIZATION |
-|---------|------|---------|----------|--------------|
-| 1.0 | 2026-03-09 | GitHub Copilot | TBD | Educare (Dada Chi Shala) Educational Trust |
+Version: 1.0
+Date: 2026-03-09
+Creator: GitHub Copilot
+Reviewer: TBD
+Organization: Educare Dada Chi Shala Educational Trust
 
 ## 1. Overview
 
-### Business purpose in plain language
+Business purpose
 
 This module helps the organization promote upcoming programs and keep the community informed about scheduled activities. It supports both public event discovery and admin maintenance of the event calendar.
 
-### What the component does
+What this module does
 
 - Lists events for public users.
 - Shows upcoming events on the homepage and events page.
 - Allows admins to create, edit, and delete event records.
-- Uses shared query hooks and cache invalidation to keep event data current.
+- Uses shared query hooks and cache invalidation to keep data current.
 
-### When it executes
+When it runs
 
-- On navigation to `/events`.
-- On homepage rendering when a subset of upcoming events is requested.
+- On navigation to /events.
+- On homepage rendering when upcoming events are requested.
 - On admin dashboard access to the Events tab.
-- On every event CRUD action initiated by an authenticated admin.
+- On every event create, update, and delete action by an authenticated admin.
 
-## 2. Components
+## 2. Business and Process Detail
 
-### 2.1 Business Overview
+Business overview
 
-Events are a program-delivery and engagement mechanism. The business requirement is to maintain one source of truth for scheduled activities while exposing the same data differently for public awareness and internal management.
+Events are a program delivery and engagement mechanism. The same data set is used for both public awareness and internal management.
 
-### 2.1.1 Process Flow
+Process flow
 
 ```mermaid
 flowchart TD
@@ -41,178 +43,157 @@ flowchart TD
     E --> F[Visitors see current event list]
 ```
 
-#### Step-by-step user journey
+Detailed journey
 
-1. An admin opens the Events tab inside the dashboard.
-2. `EventManagement.jsx` renders existing records using `useEvents()`.
-3. The admin opens `EventForm.jsx` for create or update.
-4. Form submission calls `useAddEvent()` or `useUpdateEvent()`.
-5. `cachedDatabaseService.js` writes to the `events` collection and stamps timestamps.
-6. Query caches for `events` and `upcomingEvents` are invalidated.
-7. Public pages refetch and display updated event cards in ascending event-date order.
-8. A public visitor browsing `/events` or the homepage sees the refreshed schedule.
+1. An admin opens the Events tab in the dashboard.
+2. EventManagement.jsx renders records using useEvents().
+3. The admin opens EventForm.jsx for create or update.
+4. Form submission calls useAddEvent() or useUpdateEvent().
+5. cachedDatabaseService.js writes to the events collection and stamps timestamps.
+6. Query caches for events and upcomingEvents are invalidated.
+7. Public pages refetch and display updated event cards in ascending event date order.
+8. A public visitor browsing /events or the homepage sees the refreshed schedule.
 
-### 2.1.2 Functional Requirements
+Functional requirements
 
-| ID | Requirement | Acceptance Criteria | Business Rules |
-|----|-------------|--------------------|----------------|
-| FR-EV-01 | The system must list all event records for public users. | `/events` renders records returned from Firestore without admin login. | Event order must be ascending by `event_date`. |
-| FR-EV-02 | The system must show upcoming events separately. | Homepage or limited views show only events on or after the current day. | Default upcoming limit is 3. |
-| FR-EV-03 | Admin users must be able to create new events. | A successful form submission writes an `events` document and becomes visible after refetch. | `created_at` and `updated_at` are stamped on create. |
-| FR-EV-04 | Admin users must be able to update existing events. | Updated content is visible after cache invalidation and refetch. | `updated_at` must be refreshed on modification. |
-| FR-EV-05 | Admin users must be able to delete events. | Deleted events no longer appear in event lists after invalidation. | Deletion is hard delete in current implementation. |
+- FR-EV-01: The system must list all event records for public users in ascending event_date order.
+- FR-EV-02: The system must show upcoming events separately. The default upcoming limit is 3.
+- FR-EV-03: Admin users must be able to create new events. created_at and updated_at are stamped on create.
+- FR-EV-04: Admin users must be able to update events. updated_at is refreshed on modification.
+- FR-EV-05: Admin users must be able to delete events. Current implementation uses hard delete.
 
-### 2.1.3 Non-Functional Requirements
+Non functional requirements
 
-- Performance: Event queries should remain lightweight and index-backed.
-- Reliability: Failed event mutations should surface errors without corrupting existing UI state.
-- Freshness: Cache invalidation should refresh both full and upcoming event lists.
-- Compatibility: Public listing and admin editing must use one shared schema.
+- Event queries should remain lightweight and index backed.
+- Failed mutations should surface errors without corrupting current UI state.
+- Cache invalidation should refresh both full and upcoming event lists.
+- Public listing and admin editing must use one shared schema.
 
-### 2.1.4 Technical Breakdown
+Technical breakdown
 
-#### Component and file structure
+Entry files
 
-Entry files:
-- `src/pages/EventsPage.jsx`
-- `src/components/EventManagement.jsx`
+- src/pages/EventsPage.jsx
+- src/components/EventManagement.jsx
 
-Child files:
-- `src/components/EventCard.jsx`
-- `src/components/EventForm.jsx`
-- `src/components/EventDetails.jsx`
+Child files
 
-Supporting files:
-- `src/hooks/useFirebaseQueries.js`
-- `src/services/cachedDatabaseService.js`
-- `src/services/cacheService.js`
-- `src/utils/helpers.js`
-- `src/utils/validators.js`
-- `src/components/common/*`
+- src/components/EventCard.jsx
+- src/components/EventForm.jsx
+- src/components/EventDetails.jsx
 
-#### Methods, public methods, and on-load behavior
+Supporting files
 
-Exported hooks used by this module:
-- `useEvents(limitCount)`
-- `useUpcomingEvents(limitCount)`
-- `useAddEvent()`
-- `useUpdateEvent()`
-- `useDeleteEvent()`
+- src/hooks/useFirebaseQueries.js
+- src/services/cachedDatabaseService.js
+- src/services/cacheService.js
+- src/utils/helpers.js
+- src/utils/validators.js
+- src/components/common
 
-Underlying service methods:
-- `getEvents()`
-- `getUpcomingEvents()`
-- `addEvent()`
-- `updateEvent()`
-- `deleteEvent()`
+Hooks used
 
-On load:
-- Public pages load event lists through query hooks.
-- Admin pages load current events and render forms conditionally.
+- useEvents(limitCount)
+- useUpcomingEvents(limitCount)
+- useAddEvent()
+- useUpdateEvent()
+- useDeleteEvent()
 
-#### Imported functions
+Underlying service methods
 
-- Firestore query helpers through `cachedDatabaseService.js`
-- React Query mutation and invalidation helpers through custom hooks
-- Date formatting helpers from shared utilities
+- getEvents()
+- getUpcomingEvents()
+- addEvent()
+- updateEvent()
+- deleteEvent()
 
-#### Security considerations
+Security considerations
 
 - Public event reading is open by design.
-- Event creation and deletion must remain admin-only via protected admin routing and backend rules.
-- Without verified Firestore rules in repository, the database must be reviewed separately for write protection.
+- Event creation, update, and deletion must remain admin only.
+- Firestore rules must enforce write protection.
 
-#### Performance analysis
+Performance considerations
 
-- `getUpcomingEvents()` uses `where('event_date', '>=', today)` and `orderBy('event_date', 'asc')`, which typically requires a compatible Firestore index.
+- getUpcomingEvents() uses event_date filtering and ordering, so a Firestore index may be required.
 - Event cache invalidation is targeted and efficient.
-- Admin updates are simple documents and should scale well unless rich media or attendee logic is later introduced.
+- Admin updates should scale well unless richer event features are added later.
 
-## 3. Related Objects and Automation
+## 3. Data and Automation
 
-### All DB related operations
+Read and write operations
 
-- Read `events` ordered by `event_date asc`
-- Read filtered upcoming `events`
-- Insert new `events` documents
-- Update existing `events` documents
-- Delete existing `events` documents
+- Read events ordered by event_date asc.
+- Read upcoming events filtered by current date.
+- Insert events documents.
+- Update events documents.
+- Delete events documents.
 
-### Primary tables involved
+Key fields
 
-Firestore collections:
-- `events`
+- event_date
+- created_at
+- updated_at
+- title and description fields used by the UI
 
-Key fields observed:
-- `event_date`
-- `created_at`
-- `updated_at`
-- Title and description fields as consumed by UI components
+Records created
 
-### Child records created
-
-- No child collections are created by the event flow.
-- Query invalidation of `events` and `upcomingEvents` acts as follow-on automation in the client.
+No child collections are created by the event flow. Query invalidation of events and upcomingEvents acts as follow on automation.
 
 ## 4. Impacted Components
 
-### All files impacted directly and indirectly
+Direct files
 
-Direct files:
-- `src/pages/EventsPage.jsx`
-- `src/components/EventManagement.jsx`
-- `src/components/EventForm.jsx`
-- `src/components/EventCard.jsx`
-- `src/components/EventDetails.jsx`
+- src/pages/EventsPage.jsx
+- src/components/EventManagement.jsx
+- src/components/EventForm.jsx
+- src/components/EventCard.jsx
+- src/components/EventDetails.jsx
 
-Indirect files:
-- `src/pages/HomePage.jsx`
-- `src/hooks/useFirebaseQueries.js`
-- `src/services/cachedDatabaseService.js`
-- `src/services/cacheService.js`
-- `src/pages/AdminDashboard.jsx`
-- `src/components/ProtectedRoute.jsx`
-- `src/config/queryClient.jsx`
+Indirect files
 
-### Impact analysis
+- src/pages/HomePage.jsx
+- src/hooks/useFirebaseQueries.js
+- src/services/cachedDatabaseService.js
+- src/services/cacheService.js
+- src/pages/AdminDashboard.jsx
+- src/components/ProtectedRoute.jsx
+- src/config/queryClient.jsx
 
-- Schema changes in `events` affect both public and admin views simultaneously.
-- Any modification to event hook names or query keys will impact invalidation logic.
-- Homepage regressions can occur if upcoming-event logic changes or returns empty data.
-- If event-date formatting or validation changes, both form entry and public display behavior are affected.
+Impact notes
 
-## 5. For Administrators / Technical Teams
+- Schema changes in events affect both public and admin views.
+- Changes to hook names or query keys affect invalidation logic.
+- Homepage regressions can occur if upcoming event logic changes or returns empty data.
+- Event date formatting or validation changes affect both forms and public display.
 
-### Configuration requirements
+## 5. Admin and Technical Notes
 
-- Firestore collection `events` must exist or be creatable by service account or authorized client.
-- Query indexes must support the `where + orderBy` combination for upcoming events.
+Configuration requirements
 
-### Permissions needed
+- Firestore collection events must exist.
+- Query indexes must support the where plus orderBy combination for upcoming events.
+
+Permissions needed
 
 - Public read access for published event data.
 - Authenticated admin write access for create, update, and delete operations.
 
-### Debug queries
+Debug queries
 
-- `events orderBy event_date asc`
-- `events where event_date >= today orderBy event_date asc limit 3`
+- events orderBy event_date asc
+- events where event_date greater than or equal to today orderBy event_date asc limit 3
 
-### Debug log setup instructions
+Common issues
 
-- Check browser console for Firestore permission-denied or failed-precondition errors.
-- Monitor mutation failures in the console because mutation hooks log errors through React Query defaults.
+- Missing Firestore index for upcoming event queries.
+- Empty public listing caused by incorrectly formatted event_date values.
+- Admin save succeeds but data appears stale because refetch has not completed yet.
 
-### Common system issues
+Troubleshooting
 
-- Missing Firestore index for upcoming-event queries.
-- Empty public listing caused by incorrectly formatted `event_date` values.
-- Admin save succeeds visually but data appears stale because refetch has not yet completed.
-
-### Troubleshooting steps
-
-1. Confirm documents in `events` contain parsable `event_date` values.
-2. Verify Firestore index support when `where` and `orderBy` are combined.
-3. Confirm the admin user can reach the dashboard through authenticated routing.
-4. Check that query invalidation occurs after mutations.
+1. Confirm documents in events contain parsable event_date values.
+2. Verify Firestore index support for the filter and order combination.
+3. Confirm the admin user reaches the dashboard through authenticated routing.
+4. Check that query invalidation runs after mutations.
 5. Hard refresh the app if stale local cache is suspected.
